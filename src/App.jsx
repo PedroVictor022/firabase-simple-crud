@@ -1,7 +1,8 @@
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore } from "firebase/firestore"
-import { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { ListClient } from "./components/ListClient";
+import { FormContext, FormProvider } from "./context/context";
 
 const firebaseConfig = initializeApp({
   apiKey: "AIzaSyCXull-Bvs3a9IZ9XSIr8739ee8juVcAvQ",
@@ -52,7 +53,7 @@ function App() {
   }
 
   return (
-    <div>
+    <React.Fragment>
       <h1>Add more clients</h1>
       <div className="form">
         <input
@@ -75,20 +76,11 @@ function App() {
         />
         <button onClick={() => createUser()}>Add client</button>
       </div>
-      <h2>List clients</h2>
-      <ul>
-        {user.map((user) => {
-          return (
-            <div key={user.id}>
-              <li>{user.name}</li>
-              <li>{user.email}</li>
-              <li>{user.cell}</li>
-              <button onClick={() => deleteUser(user.id)}>Deletar user</button>
-            </div>
-          )
-        })}
-      </ul>
-    </div>
+      <ListClient 
+        user={user}
+        deleteUser={deleteUser}
+      />
+    </React.Fragment>
   )
 }
 
