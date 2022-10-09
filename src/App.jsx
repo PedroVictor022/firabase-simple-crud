@@ -1,8 +1,9 @@
+import { Box, Flex, Heading } from "@chakra-ui/react";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, deleteDoc, doc, getDocs, getFirestore } from "firebase/firestore"
 import React, { useContext, useEffect, useState } from 'react'
+import { FormClient } from "./components/FormClient";
 import { ListClient } from "./components/ListClient";
-import { FormContext, FormProvider } from "./context/context";
 
 const firebaseConfig = initializeApp({
   apiKey: "AIzaSyCXull-Bvs3a9IZ9XSIr8739ee8juVcAvQ",
@@ -12,6 +13,7 @@ const firebaseConfig = initializeApp({
 
 
 function App() {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [cell, setCell] = useState("");
@@ -39,48 +41,42 @@ function App() {
     const userRef = doc(db, 'users', id);
     await deleteDoc(userRef);
     console.log(`Usuario deletado!`)
-    
+
   }
 
   async function createUser() {
     console.log(name, email, cell)
     const newUser = await addDoc(userCollections, {
       name,
-      email, 
+      email,
       cell
     })
     console.log(newUser)
   }
 
   return (
-    <React.Fragment>
-      <h1>Add more clients</h1>
-      <div className="form">
-        <input
-          type="text"
-          value={name}
-          onChange={e => setName(e.target.value)}
-          placeholder="client name"
-        />
-        <input
-          type="text"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          placeholder="email client"
-        />
-        <input
-          type="text"
-          value={cell}
-          onChange={e => setCell(e.target.value)}
-          placeholder="cell client"
-        />
-        <button onClick={() => createUser()}>Add client</button>
-      </div>
-      <ListClient 
+    <Box
+      w='100%'
+      h='auto'
+      minH='100vh'
+      bg='gray.800'
+    >
+      <Box w="100%" h="5rem" p="4" textAlign="center" bg="gray.900">
+        <Heading color="whiteAlpha.900">My Contacts</Heading>
+      </Box>
+      <FormClient
+        name={name} setName={setName}
+        email={email} setEmail={setEmail}
+        cell={cell} setCell={setCell}
+        createUser={createUser}
+      />
+      <ListClient
         user={user}
         deleteUser={deleteUser}
       />
-    </React.Fragment>
+
+
+    </Box>
   )
 }
 
